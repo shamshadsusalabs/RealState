@@ -18,5 +18,5 @@ router.get('/nearby', requiredLatLng, propertyController.getNearbyProperties);
 router.get('/getby/:id', propertyController.getPropertyById);
 router.put('/update/:id', propertyController.updateProperty);
 router.delete('/delete/:id', propertyController.deleteProperty);
-
+router.get('/properties/seller/:sellerId',accessTokenverify,allowedRoles('seller'),propertyController.getPropertiesBySeller);
 module.exports = router;

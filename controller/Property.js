@@ -1,5 +1,5 @@
 const Property = require('../schema/Property');
-
+const mongoose = require('mongoose');
 // ✅ Create New Property
 exports.createProperty = async (req, res) => {
   try {
@@ -95,5 +95,36 @@ exports.deleteProperty = async (req, res) => {
     res.json({ success: true, message: 'Property deleted' });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Something went wrong' });
+  }
+};
+
+
+exports.getPropertiesBySeller = async (req, res) => {
+  try {
+      const { sellerId } = req.params; // Assuming sellerId is passed as a URL parameter
+      
+      // Find all properties where sellerId matches
+      const properties = await Property.find({ sellerId });
+      
+      if (properties.length === 0) {
+          return res.status(404).json({
+              success: false,
+              message: 'No properties found for this seller',
+              data: []
+          });
+      }
+      
+      res.status(200).json({
+          success: true,
+          message: 'Properties fetched successfully',
+          data: properties
+      });
+  } catch (error) {
+      console.error('Error fetching properties by seller:', error);
+      res.status(500).json({
+          success: false,
+          message: 'Server error while fetching properties',
+          error: error.message
+      });
   }
 };
